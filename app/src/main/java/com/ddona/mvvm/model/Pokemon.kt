@@ -12,5 +12,5 @@ data class Pokemon(
     @ColumnInfo(name="pokemon_name")
     val name: String,
     @ColumnInfo(name = "pokemon_url")
-    val url: String
+    var url: String
 )

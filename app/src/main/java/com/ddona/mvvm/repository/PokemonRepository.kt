@@ -20,8 +20,8 @@ class PokemonRepository(
         pokemonDao.insertPokemon(pokemon)
     }
 
-    fun deletePokemon(pokemonName: String?) {
-        pokemonDao.deletePokemon(pokemonName!!)
+    fun deletePokemon(pokemonName: String) {
+        pokemonDao.deletePokemon(pokemonName)
     }
 
     fun deleteAllPokemon() {
