@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ddona.mvvm">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name=".MvvmApplication"
         android:allowBackup="true"
@@ -19,11 +20,11 @@
         </activity>
         <activity android:name=".ui.sample.SampleActivity">
             <!--It's sample, remove on production-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
     </application>
 
