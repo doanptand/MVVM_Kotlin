@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddona.mvvm.util.Resource
+import com.ddona.mvvm.util.Result
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -12,9 +13,11 @@ import java.lang.Exception
 
 class SampleViewModel : ViewModel() {
     private val data = MutableLiveData<Resource<List<String>>>()
+    private val localData = MutableLiveData<Result>()
 
     init {
         fetchData()
+        fetchLocalData()
     }
 
     private fun fetchData() {
@@ -63,7 +66,23 @@ class SampleViewModel : ViewModel() {
         }
     }
 
-    fun getData(): LiveData<Resource<List<String>>> {
-        return data
+    private fun fetchLocalData() {
+        viewModelScope.launch {
+            localData.postValue(Result.Loading)
+            try {
+                withTimeout(1000) {
+                    localData.postValue(Result.Success(listOf("asdf", "asdf", "ASdf")))
+                }
+            } catch (e: Exception) {
+                localData.postValue(Result.Error(e))
+            }
+        }
+
     }
+
+    fun getLocalData(): LiveData<Result> = localData
+
+
+    fun getData(): LiveData<Resource<List<String>>> = data
+
 }

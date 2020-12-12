@@ -2,11 +2,14 @@ package com.ddona.mvvm.ui.sample
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.ddona.mvvm.R
 import com.ddona.mvvm.adapter.SampleAdapter
+import com.ddona.mvvm.extension.showLongToast
 import com.ddona.mvvm.extension.showShortToast
+import com.ddona.mvvm.util.Result
 import com.ddona.mvvm.util.Status
 import com.ddona.mvvm.viewmodel.SampleViewModel
 import com.ddona.mvvm.widget.addDivider
@@ -56,6 +59,20 @@ class SampleActivity : AppCompatActivity() {
                 }
             }
         }
+
+        viewModel.getLocalData().observe(this, {
+            when (it) {
+                is Result.Success -> {
+                    showLongToast("I get ${(it.data as List<*>).size} item")
+                }
+                is Result.Error -> {
+                    showLongToast("The error happen ${it.e.message}")
+                }
+                is Result.Loading -> {
+                    showLongToast("I'm trying to load data for you")
+                }
+            }
+        })
     }
 
     private fun setupToolbar() {
