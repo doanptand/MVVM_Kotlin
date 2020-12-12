@@ -4,12 +4,15 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ddona.mvvm.db.PokemonDatabase
 import com.ddona.mvvm.model.Pokemon
 import com.ddona.mvvm.model.PokemonResponse
 import com.ddona.mvvm.network.PokemonClient
 import com.ddona.mvvm.repository.PokemonRepository
 import com.ddona.mvvm.util.IMAGE_URL
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +33,7 @@ class PokemonViewModel(context: Context) : ViewModel() {
     private val networkPokemon: LiveData<List<Pokemon>>
         get() = _networkPokemon
 
-    private var favoritePokemon: LiveData<List<Pokemon>> = repository.getFavoritePokemon()
+    private var favoritePokemon: LiveData<List<Pokemon>>
 
     init {
         favoritePokemon = repository.getFavoritePokemon()
@@ -38,10 +41,14 @@ class PokemonViewModel(context: Context) : ViewModel() {
 
 
     fun getNetworkPokemonList(): LiveData<List<Pokemon>> = networkPokemon
-
+    fun getFavoriteFromDB() = repository.getFavoritePokemon()
     fun getFavoritePokemonList(): LiveData<List<Pokemon>> = favoritePokemon
 
-    fun insertPokemon(pokemon: Pokemon) = repository.insertPokemon(pokemon)
+    fun insertPokemon(pokemon: Pokemon) {
+        viewModelScope.launch(Dispatchers.Default) {
+            repository.insertPokemon(pokemon)
+        }
+    }
 
     fun deletePokemon(name: String) = repository.deletePokemon(name)
 

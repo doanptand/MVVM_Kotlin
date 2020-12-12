@@ -35,5 +35,6 @@ class PokemonAdapter(private val pokemonList: ArrayList<Pokemon>) :
         holder.bind(pokemonList[position])
 
     override fun getItemCount(): Int = pokemonList.size
+    fun getPokemonAt(position: Int): Pokemon = pokemonList[position]
 
 }
