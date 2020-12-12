@@ -5,8 +5,11 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import com.bumptech.glide.Glide
+import com.ddona.mvvm.R
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -28,6 +31,10 @@ fun Context.showLongToast(content: String) {
 
 fun ViewGroup.inflater(@LayoutRes id: Int, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(this.context).inflate(id, this, attachToRoot)
+}
+
+fun ImageView.loadImage(link : String) {
+    Glide.with(this).load(link).placeholder(R.drawable.pokemon).into(this)
 }
 
 fun Long.convertTimestampToDate(): String {

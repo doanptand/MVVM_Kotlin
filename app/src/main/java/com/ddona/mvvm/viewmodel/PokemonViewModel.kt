@@ -1,6 +1,6 @@
 package com.ddona.mvvm.viewmodel
 
-import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,9 +15,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-class PokemonViewModel(application: Application) : ViewModel() {
+class PokemonViewModel(context: Context) : ViewModel() {
     private val repository: PokemonRepository = PokemonRepository(
-        PokemonDatabase.getDatabase(application.applicationContext).pokemonDao(),
+        PokemonDatabase.getDatabase(context.applicationContext).pokemonDao(),
         PokemonClient.pokeApiService
     )
 
@@ -56,7 +56,7 @@ class PokemonViewModel(application: Application) : ViewModel() {
                     for (pokemon in pokemonList) {
                         val url: String = pokemon.url
                         val index = url.split("/")
-                        pokemon.url = IMAGE_URL + index[index.size - 1] + ".png"
+                        pokemon.url = IMAGE_URL + index[index.size - 2] + ".png"
                         _networkPokemon.postValue(pokemonList)
                         Timber.d("get size is: ${pokemonList.size}")
                     }
