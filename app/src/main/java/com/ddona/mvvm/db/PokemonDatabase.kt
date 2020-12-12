@@ -11,27 +11,18 @@ abstract class PokemonDatabase : RoomDatabase() {
     abstract fun pokemonDao(): PokemonDao
 
     companion object {
-        private var INSTANCE: PokemonDatabase? = null
-
-        fun getDatabase(context: Context): PokemonDatabase {
-            return INSTANCE ?: Room.databaseBuilder(
-                context.applicationContext,
-                PokemonDatabase::class.java,
-                "pokemon_db"
-            ).build()
-        }
-
-        //Advanced
         @Volatile
-        private var INSTANCE2: PokemonDatabase? = null
-        fun getDatabase2(context: Context): PokemonDatabase {
-            return INSTANCE2 ?: synchronized(this) {
+        private var INSTANCE: PokemonDatabase? = null
+        fun getDatabase(context: Context): PokemonDatabase {
+            return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     PokemonDatabase::class.java,
                     "pokemon_db"
-                ).build()
-                INSTANCE2 = instance
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                INSTANCE = instance
                 instance//this return instance
             }
         }
