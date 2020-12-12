@@ -1,8 +1,10 @@
 package com.ddona.mvvm.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations.map
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddona.mvvm.db.PokemonDatabase
@@ -11,6 +13,9 @@ import com.ddona.mvvm.model.PokemonResponse
 import com.ddona.mvvm.network.PokemonClient
 import com.ddona.mvvm.repository.PokemonRepository
 import com.ddona.mvvm.util.IMAGE_URL
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -53,27 +58,14 @@ class PokemonViewModel(context: Context) : ViewModel() {
     fun deletePokemon(name: String) = repository.deletePokemon(name)
 
     fun getPokemonFromNetwork() {
-        repository.getPokemonList().enqueue(object : Callback<PokemonResponse> {
-            override fun onResponse(
-                call: Call<PokemonResponse>,
-                response: Response<PokemonResponse>
-            ) {
-                val pokemonList = response.body()!!.pokemonList
-                if (response.isSuccessful) {
-                    for (pokemon in pokemonList) {
-                        val url: String = pokemon.url
-                        val index = url.split("/")
-                        pokemon.url = IMAGE_URL + index[index.size - 2] + ".png"
-                        _networkPokemon.postValue(pokemonList)
-                        Timber.d("get size is: ${pokemonList.size}")
-                    }
-                }
+        repository.getPokemonList()
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMap { response ->
+                Observable.fromIterable(response.pokemonList)
             }
-
-            override fun onFailure(call: Call<PokemonResponse>, t: Throwable) {
-                Timber.e(t)
-            }
-
-        })
+            .map(Pokemon::changeUrl)
+            .toList()
+            .subscribe { it -> _networkPokemon.postValue(it) }
     }
 }

@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.ddona.mvvm.util.IMAGE_URL
 
 @Entity(tableName = "favorite")
 data class Pokemon(
@@ -24,5 +25,11 @@ data class Pokemon(
             return oldItem == newItem
         }
 
+    }
+
+    fun changeUrl(): Pokemon {
+        val index = url.split("/")
+        this.url = IMAGE_URL + index[index.size - 2] + ".png"
+        return this
     }
 }

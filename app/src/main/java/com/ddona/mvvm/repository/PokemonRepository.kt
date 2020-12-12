@@ -5,6 +5,7 @@ import com.ddona.mvvm.db.PokemonDao
 import com.ddona.mvvm.model.Pokemon
 import com.ddona.mvvm.model.PokemonResponse
 import com.ddona.mvvm.network.PokeApiService
+import io.reactivex.rxjava3.core.Observable
 import retrofit2.Call
 
 
@@ -12,7 +13,7 @@ class PokemonRepository(
     private val pokemonDao: PokemonDao,
     private val pokemonApiService: PokeApiService
 ) {
-    fun getPokemonList(): Call<PokemonResponse> {
+    fun getPokemonList(): Observable<PokemonResponse> {
         return pokemonApiService.getPokemonList()
     }
 
