@@ -1,16 +1,12 @@
 package com.ddona.mvvm.extension
 
-import android.content.ContentValues
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.LayoutRes
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -20,6 +16,14 @@ fun Context.getColorAttr(attr: Int): Int {
     val color = typedArray.getColor(0, Color.LTGRAY)
     typedArray.recycle()
     return color
+}
+
+fun Context.showShortToast(content: String) {
+    Toast.makeText(this, content, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.showLongToast(content: String) {
+    Toast.makeText(this, content, Toast.LENGTH_LONG).show()
 }
 
 fun ViewGroup.inflater(@LayoutRes id: Int, attachToRoot: Boolean = false): View {

@@ -6,6 +6,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.ddona.mvvm.R
 import com.ddona.mvvm.adapter.SampleAdapter
+import com.ddona.mvvm.extension.showShortToast
+import com.ddona.mvvm.util.Status
+import com.ddona.mvvm.viewmodel.SampleViewModel
 import com.ddona.mvvm.widget.addDivider
 import kotlinx.android.synthetic.main.activity_sample.*
 
@@ -35,16 +38,22 @@ class SampleActivity : AppCompatActivity() {
     }
 
     private fun subscribeUI() {
-        viewModel.listHistory.observe(this) { history ->
-            if (history.isNotEmpty()) {
-                txt_no_history.visibility = View.GONE
-                swipeRefresh.visibility = View.VISIBLE
-                layout_list_history.visibility = View.VISIBLE
-                mAdapter.submitList(history)
-            } else {
-                txt_no_history.visibility = View.VISIBLE
-                swipeRefresh.visibility = View.GONE
-                layout_list_history.visibility = View.GONE
+        viewModel.getData().observe(this) {
+            when (it.status) {
+                Status.LOADING -> {
+                    txt_no_history.visibility = View.VISIBLE
+                    swipeRefresh.visibility = View.GONE
+                    layout_list_history.visibility = View.GONE
+                }
+                Status.SUCCESS -> {
+                    txt_no_history.visibility = View.GONE
+                    swipeRefresh.visibility = View.VISIBLE
+                    layout_list_history.visibility = View.VISIBLE
+                    mAdapter.submitList(it.data)
+                }
+                Status.ERROR -> {
+                    it.message?.let { msg -> showShortToast(msg) }
+                }
             }
         }
     }
