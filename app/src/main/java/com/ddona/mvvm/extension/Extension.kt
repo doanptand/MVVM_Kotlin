@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ddona.mvvm.R
 import java.text.SimpleDateFormat
@@ -33,7 +35,7 @@ fun ViewGroup.inflater(@LayoutRes id: Int, attachToRoot: Boolean = false): View 
     return LayoutInflater.from(this.context).inflate(id, this, attachToRoot)
 }
 
-fun ImageView.loadImage(link : String) {
+fun ImageView.loadImage(link: String) {
     Glide.with(this).load(link).placeholder(R.drawable.pokemon).into(this)
 }
 
@@ -50,4 +52,26 @@ fun Long.convertAmountTimeToText(): String {
             TimeUnit.MILLISECONDS.toMinutes(this)
         )
     )
+}
+
+fun RecyclerView.setupSwipeItem(
+    dragDirs: Int,
+    swipeDirs: Int,
+    dragAction: (Int) -> Boolean,
+    swipeAction: (Int) -> Unit
+) {
+    val simpleCallback = object : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return dragAction.invoke(viewHolder.absoluteAdapterPosition)
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            swipeAction.invoke(viewHolder.absoluteAdapterPosition)
+        }
+    }
+    ItemTouchHelper(simpleCallback).attachToRecyclerView(this)
 }

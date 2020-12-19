@@ -55,7 +55,13 @@ class PokemonViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun deletePokemon(name: String) = repository.deletePokemon(name)
+    fun deletePokemon(name: String) {
+        //https://github.com/MindorksOpenSource/Kotlin-Coroutines-Android-Examples
+        //https://blog.mindorks.com/mastering-kotlin-coroutines-in-android-step-by-step-guide
+        viewModelScope.launch(Dispatchers.Default) {
+            repository.deletePokemon(name)
+        }
+    }
 
     fun getPokemonFromNetwork() {
         repository.getPokemonList()
