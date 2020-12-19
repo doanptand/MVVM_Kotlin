@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -74,4 +75,9 @@ fun RecyclerView.setupSwipeItem(
         }
     }
     ItemTouchHelper(simpleCallback).attachToRecyclerView(this)
+}
+
+@BindingAdapter("link")
+fun ImageView.setResourceByLink(link: String) {
+    Glide.with(this).load(link).placeholder(R.mipmap.ic_launcher).into(this)
 }

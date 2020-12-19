@@ -2,11 +2,12 @@ package com.ddona.mvvm.ui.sample
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.ddona.mvvm.R
 import com.ddona.mvvm.adapter.SampleAdapter
+import com.ddona.mvvm.databinding.ActivitySampleBinding
 import com.ddona.mvvm.extension.showLongToast
 import com.ddona.mvvm.extension.showShortToast
 import com.ddona.mvvm.util.Result
@@ -20,10 +21,14 @@ class SampleActivity : AppCompatActivity() {
     private val mAdapter by lazy {
         SampleAdapter()
     }
-
+    private lateinit var binding: ActivitySampleBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sample)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_sample)
+        binding.name = "Hello world"
+        binding.link =
+            "https://image.thanhnien.vn/768/uploaded/ngocthanh/2020_07_13/ngoctrinhmuonsinhcon1_swej.jpg"
+        binding.executePendingBindings()
         setupToolbar()
         initRecyclerView()
         subscribeUI()
