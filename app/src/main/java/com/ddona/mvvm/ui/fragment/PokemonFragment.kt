@@ -12,14 +12,13 @@ import com.ddona.mvvm.R
 import com.ddona.mvvm.adapter.PokemonAdapter
 import com.ddona.mvvm.extension.setupSwipeItem
 import com.ddona.mvvm.viewmodel.PokemonViewModel
-import com.ddona.mvvm.viewmodel.PokemonViewModelProviderFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_pokemon.*
 import timber.log.Timber
 
+@AndroidEntryPoint
 class PokemonFragment : Fragment() {
-    private val viewModel: PokemonViewModel by viewModels() {
-        PokemonViewModelProviderFactory(requireContext())
-    }
+    private val viewModel: PokemonViewModel by viewModels()
 
     private lateinit var pokemonAdapter: PokemonAdapter
 

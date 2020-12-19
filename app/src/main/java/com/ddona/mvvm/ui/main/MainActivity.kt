@@ -6,9 +6,10 @@ import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import com.ddona.mvvm.R
 import com.ddona.mvvm.adapter.PokemonPagerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,33 +1,23 @@
 package com.ddona.mvvm.viewmodel
 
-import android.content.Context
-import android.util.Log
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations.map
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ddona.mvvm.db.PokemonDatabase
 import com.ddona.mvvm.model.Pokemon
-import com.ddona.mvvm.model.PokemonResponse
-import com.ddona.mvvm.network.PokemonClient
 import com.ddona.mvvm.repository.PokemonRepository
-import com.ddona.mvvm.util.IMAGE_URL
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import timber.log.Timber
 
-class PokemonViewModel(context: Context) : ViewModel() {
-    private val repository: PokemonRepository = PokemonRepository(
-        PokemonDatabase.getDatabase(context.applicationContext).pokemonDao(),
-        PokemonClient.pokeApiService
-    )
+
+class PokemonViewModel @ViewModelInject constructor(
+    private val repository: PokemonRepository
+) : ViewModel() {
+
 
     //we can use only one MutableLiveData but due to we don't want other component can edit data, so we create another Live data and expose it instead of MutableLiveData, see below code
     //    private var networkPokemon: MutableLiveData<List<Pokemon>> = MutableLiveData()
